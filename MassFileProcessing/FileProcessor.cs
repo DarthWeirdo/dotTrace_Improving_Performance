@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Threading;
 using System.Windows;
 
 namespace MassFileProcessing
@@ -17,12 +18,15 @@ namespace MassFileProcessing
         public FileProcessor()
         {
             _updater = new ProgressUpdater();
-            Worker = new BackgroundWorker {WorkerReportsProgress = true};
+            Worker = new BackgroundWorker {WorkerReportsProgress = true};            
             Worker.DoWork += ProcessFiles;
         }
 
         private void ProcessFiles(object sender, DoWorkEventArgs evts)
         {
+            if (Thread.CurrentThread.Name == null)            
+                Thread.CurrentThread.Name = "FileProcessing";
+            
             try
             {
 
